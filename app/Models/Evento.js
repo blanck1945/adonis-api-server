@@ -7,6 +7,10 @@ class Evento extends Model {
   static get table() {
     return 'eventos'
   }
+
+  static get hidden() {
+    return ['created_at', 'updated_at']
+  }
 }
 
 module.exports = Evento

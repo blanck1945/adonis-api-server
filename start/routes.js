@@ -21,4 +21,9 @@ Route.get('/', () => {
 })
 
 //event Routes
+Route.post("/api/eventos/create", 'EventoConController.store')
+Route.get("/api/eventos/name", 'EventoConController.byName')
+Route.get("/api/eventos/type", 'EventoConController.byType')
+Route.get('/api/eventos/price', 'EventoConController.byPrice')
+Route.get('/api/eventos/:id', 'EventoConController.show')
 Route.get("/api/eventos", 'EventoConController.index')
