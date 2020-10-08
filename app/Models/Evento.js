@@ -8,8 +8,20 @@ class Evento extends Model {
     return 'eventos'
   }
 
+  static get computed() {
+    return ['next_date', 'last_date', 'low_price', 'average_price']
+  }
+
   static get hidden() {
     return ['created_at', 'updated_at']
+  }
+
+  ticket() {
+    return this.hasMany('App/Models/Ticket')
+  }
+
+  schedule() {
+    return this.hasMany('App/Models/Schedule')
   }
 }
 
