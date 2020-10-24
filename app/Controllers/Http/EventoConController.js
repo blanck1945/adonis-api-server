@@ -27,18 +27,17 @@ class EventoConController {
   }
 
 
-  async byName({ request }) {
+  async byName({ request, response }) {
     const { query } = request.all()
-    if (!query) {
-      return { msg: 'No hay parametro para realizar la consulta' }
-    }
 
     const data = await Evento.query()
       .where('event_name', 'ilike', "%" + query + "%").fetch()
     if (data.rows.length === 0) {
-      return { msg: 'No hay registro para ese parametro' }
+      return response.json({ msg: 'No hay registro para ese parametro' })
     } else {
-      return data
+      return response.json({
+        result: data
+      })
     }
   }
 

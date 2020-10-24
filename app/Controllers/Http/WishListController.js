@@ -33,14 +33,13 @@ class WishListController {
       const { eventId } = request.all()
       const data = await WishList.query().select('*').where('user_id', params.id).fetch()
       const wish = data.toJSON()
-
-      const check = await checkDuplicate(wish, eventId)
+      const check = wish[0].events_id_array.find(el => el === eventId)
       if (check !== undefined) {
         return response.json({
-          msg: "Event already in your list"
+          msg: "noAdd",
+          state: true
         })
       }
-
       const arr = [...wish[0].events_id_array, eventId]
 
       await WishList
@@ -49,8 +48,38 @@ class WishListController {
         .update({ events_id_array: JSON.stringify([...arr]) })
 
       return response.json({
-        msg: "Evento agregado a su Lista de Deseos"
+        msg: "add",
+        state: false
       })
+    }
+    catch (err) {
+      console.log(err)
+      return response.json({
+        msg: "Problemas de Servidor"
+      })
+    }
+  }
+
+  async checkDuplicate({ params, response }) {
+    try {
+      const data = await WishList.query().select('*').where('user_id', params.user_id).fetch()
+      const list = data.toJSON()
+      const match = list[0].events_id_array.find(el => el === parseInt(params.id))
+      console.log(match)
+      if (match === undefined) {
+        return response.json({
+          state: true,
+          toast: "add",
+          msg: "Evento agreagado a su lista"
+        })
+      }
+
+      return response.json({
+        state: false,
+        toast: 'noAdd',
+        msg: "Este evento ya existe en su lista"
+      })
+
     }
     catch (err) {
       console.log(err)

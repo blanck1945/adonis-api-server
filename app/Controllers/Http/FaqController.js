@@ -8,7 +8,6 @@ class FaqController {
     const data = await FAQ.all()
     const faqs = data.toJSON()
     const res = await this.addFalse(faqs)
-    console.log("Adonis is using this route")
     return {
       res
     }

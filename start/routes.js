@@ -18,15 +18,17 @@ const { RouteResource, RouteGroup } = require('@adonisjs/framework/src/Route/Man
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.get('/', () => {
-  return { greeting: 'Usted esta usando una esta API' }
-})
+Route.get('/', 'HomeController.home')
 
 //User Routes
 Route.group(() => {
   //GET Routes
   Route.get("user/logged", 'UserController.logUser').middleware('auth')
   Route.get('user/get_email/:id', "UserController.getEmail")
+  Route.get('api/user/get_wish_list/:id', "UserController.getWishList")
+
+  //PATCH Routes
+  Route.patch('user/toogle_wish_list/:id', "UserController.toogleWishList")
 
   //POST Routes
   Route.post("user/create", 'UserController.store').validator('StoreUser').validator("FormatData")
@@ -51,13 +53,13 @@ Route.group(() => {
 
   //POST Routes
   Route.post("eventos/create", "EventoConController.store")
+  Route.post('eventos/search_by_name', 'EventoConController.byName')
 
   //PATCH Routes
   Route.patch("eventos/patch/:id", 'EventoConController.patchOne')
 
 
   //GET Routes
-  Route.get("eventos/name", 'EventoConController.byName')
   Route.get("eventos/type", 'EventoConController.byType')
   Route.get('eventos/price', 'EventoConController.byPrice')
   Route.get('eventos/:id', 'EventoConController.show')
@@ -98,6 +100,7 @@ Route.group(() => {
 Route.group(() => {
   //GET Routes
   Route.get('wishlist/:id', 'WishListController.getUseWishList')
+  Route.get('wishlist/check_duplicate/:id/:user_id', 'WishListController.checkDuplicate')
 
 
   //POST Routes

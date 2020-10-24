@@ -38,12 +38,37 @@ class UserController {
 
   async getEmail({ params, response }) {
     try {
-
       const userEmail = await db.table('users').select('email').where('id', params.id)
       const emailDomain = userEmail[0].email.split('@')
       const formatEmail = userEmail[0].email.slice(0, 4) + "*****" + '@' + emailDomain[1]
       return response.json({
         email: formatEmail
+      })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  async getWishList({ params, response }) {
+    try {
+      const userWishList = await db.table('users').select('wish_list').where('id', params.id)
+
+      return response.json({
+        userWishList
+      })
+    }
+    catch (err) {
+      console.log(err)
+    }
+  }
+
+  async toogleWishList({ params, repsonse }) {
+    try {
+      await User.query().where('id', params.id).update({ wish_list: true })
+
+      return repsonse.json({
+        msg: "Lista de deseo creada con exito"
       })
     }
     catch (err) {
